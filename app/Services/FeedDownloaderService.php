@@ -6,11 +6,20 @@ namespace App\Services;
 
 use App\Contracts\FeedDownloaderInterface;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 class FeedDownloaderService implements FeedDownloaderInterface
 {
-    public const FEED_URL = 'REMOVED';
+    /**
+     * @var mixed|string
+     */
+    public string $feedUrl;
+
+    public function __construct()
+    {
+        $this->feedUrl = Config::get('services.feed.url');
+    }
 
     /**
      * @throws \JsonException
@@ -25,7 +34,7 @@ class FeedDownloaderService implements FeedDownloaderInterface
 
     private function fetchFeed(): Response
     {
-        $response = Http::get(self::FEED_URL);
+        $response = Http::get($this->feedUrl);
 
         if (!$response->successful()) {
             throw new \RuntimeException("Feed download failed with status: {$response->status()}");

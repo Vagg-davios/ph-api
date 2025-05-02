@@ -6,8 +6,6 @@ use App\Contracts\FeedDownloaderInterface;
 use App\Services\FeedDownloaderService;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversFunction;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use Tests\TestCase;
 
 #[CoversClass(FeedDownloaderService::class)]
@@ -24,7 +22,7 @@ class FeedDownloaderServiceTest extends TestCase
     public function testDownloadFunctionIsSuccessful()
     {
         Http::fake([
-            FeedDownloaderService::FEED_URL => Http::response(
+            $this->service->feedUrl => Http::response(
                 '{"items": [{"id": 1, "name": "Test"}]}',
                 200
             )
@@ -38,7 +36,7 @@ class FeedDownloaderServiceTest extends TestCase
     public function testDownloadFunctionClearsInvalidCharacters()
     {
         Http::fake([
-            FeedDownloaderService::FEED_URL => Http::response(
+            $this->service->feedUrl => Http::response(
                 '{"items": [{"id": 1, "name": "Test\xF0"}]}',
                 200
             )
@@ -55,7 +53,7 @@ class FeedDownloaderServiceTest extends TestCase
         $this->expectExceptionMessage('Feed download failed with status: 500');
 
         Http::fake([
-            FeedDownloaderService::FEED_URL => Http::response(null, 500)
+            $this->service->feedUrl => Http::response(null, 500)
         ]);
 
         $this->service->download();
