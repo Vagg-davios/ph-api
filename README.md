@@ -41,7 +41,7 @@ cd ph-api
 cp .env.example .env
 ```
 
-Customize DB credentials and other environment variables as needed.
+Customize environment variables as needed. DB username & password are set, just add the CDN link to **FEED_URL**
 
 ### 3. Start Docker with Sail
 
