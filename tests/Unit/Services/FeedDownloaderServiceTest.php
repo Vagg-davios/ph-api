@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Tests\Unit\Services;
 
 use App\Contracts\FeedDownloaderInterface;
 use App\Services\FeedDownloaderService;
