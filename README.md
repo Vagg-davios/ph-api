@@ -1,7 +1,7 @@
 
 # Pornstar Feed API
 
-A Laravel-based RESTful API that processes and serves data from a daily-updated JSON feed of pornstars. Built for a technical assessment, this application demonstrates backend architecture, data handling, Docker deployment, and test coverage. I hope I didn't forget anything.
+A Laravel-based REST API that processes and serves data from a daily-updated JSON feed. I hope I didn't forget anything.
 
 ## 🚀 Features
 
@@ -10,20 +10,20 @@ A Laravel-based RESTful API that processes and serves data from a daily-updated 
 - Provides a RESTful API for the `Pornstar` entity
 - Supports filtering, searching, sorting, and pagination
 - Includes endpoints for statistics and license options
-- Uses Docker for consistent deployment
 - Includes unit tests
 - Postman collection available for API testing (included in this repo)
 
 ---
 
-## 📦 Tech Stack
+## ⚙ Prerequisites 
+- Linux / MacOS / Windows with WSL2
+- Docker
+
+## 📦 Stack
 
 - **Laravel** 
 - **Redis**
 - **MySQL**
-- **Docker + Sail**
-- **PHPUnit**
-
 ---
 
 ## 🛠 Setup & Installation
@@ -41,20 +41,22 @@ cd ph-api
 cp .env.example .env
 ```
 
-Customize environment variables as needed. DB username & password are set, just add the CDN link to **FEED_URL**
+DB username & password are set, just add the CDN link to **FEED_URL**
 
-### 3. Start Docker with Sail
+### 3. Composer install
+
+```bash
+docker run --rm \
+ -v $(pwd):/opt \
+ -w /opt \
+ composer:latest install
+```
+> Make sure Docker Desktop is running.
+
+### 4. Fire up Docker
 
 ```bash
 ./vendor/bin/sail up -d
-```
-
-> Make sure Docker Desktop is running.
-
-### 4. Install Dependencies
-
-```bash
-./vendor/bin/sail composer install
 ```
 
 ### 5. Generate App Key
@@ -69,9 +71,7 @@ Customize environment variables as needed. DB username & password are set, just 
 ./vendor/bin/sail artisan migrate
 ```
 
----
-
-## 📥 Import Pornstar Feed
+### 7. Fetch data
 
 ```bash
 ./vendor/bin/sail artisan feed:download
@@ -99,7 +99,7 @@ This command:
 ### 🔍 Example Query
 
 ```http
-GET /api/pornstars?search=Jane&license=exclusive&wl_status=true&sort_by=name&sort_dir=desc&per_page=10
+GET /api/pornstars/search?q=Jane&license=exclusive&wl_status=true&sort_by=name&sort_dir=desc&per_page=10
 ```
 
 ---
@@ -110,45 +110,6 @@ GET /api/pornstars?search=Jane&license=exclusive&wl_status=true&sort_by=name&sor
 2. Go to **Collections** → click **Import**
 3. Paste the contents of `postman_collection.json` (provided in this repo) inside there
 4. Click **Import**
-
----
-
-## ✅ Running Tests
-
-```bash
-./vendor/bin/sail artisan test
-```
-
-Or for PHPUnit directly:
-
-```bash
-./vendor/bin/sail phpunit
-```
-
----
-
-## 📁 Project Structure Highlights
-
-* `app/Services/FeedProcessorService.php` — Downloads and processes the JSON feed
-* `app/Http/Controllers/Api/PornstarController.php` — API controller logic
-* `app/Http/Resources/PornstarResource.php` — API resource for serialization
-* `routes/api.php` — Route definitions
-* `tests/Unit` — Unit tests for feed processing
-
----
-
-## 🐳 Docker Commands
-
-```bash
-# Start containers
-./vendor/bin/sail up -d
-
-# Run Artisan commands
-./vendor/bin/sail artisan <command>
-
-# Run Tests
-./vendor/bin/sail test
-```
 
 ---
 
